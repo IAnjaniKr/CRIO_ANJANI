@@ -23,17 +23,24 @@ public class DP1 {
             Workbook workbook = new XSSFWorkbook(excelFile);
 
             Sheet sheet = workbook.getSheetAt(0); // Get the first sheet
-            int numRows = sheet.getPhysicalNumberOfRows();
+            //int numRows = sheet.getPhysicalNumberOfRows();
+            int numRows = sheet.getLastRowNum();
             int numCols = sheet.getRow(0).getPhysicalNumberOfCells();
-
-            testData = new Object[numRows - 1][numCols];
-
-            for (int i = 1; i < numRows; i++) {
+            System.out.println("NUMBER OF ROW: "+numRows);
+            System.out.println("NUMBER OF COLUMNS: "+numCols);
+            testData = new Object[numRows][numCols-1];
+            int columnIndex=0;
+            int rowIndex =0;
+            DataFormatter formatter = new DataFormatter();
+            for (int i = 1; i <= numRows; i++) {
                 Row row = sheet.getRow(i);
-                for (int j = 0; j < numCols; j++) {
+                columnIndex = 0;
+                for (int j = 1; j < numCols; j++) {//j = 0
                     Cell cell = row.getCell(j);
-                    testData[i - 1][j] = cell.toString();
+                    testData[rowIndex][columnIndex] = formatter.formatCellValue(cell);
+                    columnIndex++;
                 }
+                rowIndex++;
             }
 
             for (int i = 0; i < testData.length; i++) {

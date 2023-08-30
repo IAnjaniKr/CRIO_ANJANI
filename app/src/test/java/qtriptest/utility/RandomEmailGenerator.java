@@ -1,9 +1,13 @@
 package qtriptest.utility;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class RandomEmailGenerator {
     public String generateRandomEmail() {
-        UUID uuid = UUID.randomUUID();
-        return uuid.toString() + "@testexample.comm";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String dateString = dateFormat.format(new Date());
+
+        //return dateString + "@testexample.comm";
+        return dateString;
     }
 }

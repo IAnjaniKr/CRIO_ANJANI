@@ -10,6 +10,7 @@ import qtriptest.utility.RandomEmailGenerator;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.*;
+import com.beust.jcommander.Parameters;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -75,21 +76,25 @@ public class testCase_01 {
        }
     }
 
-    @Test(dataProvider="data-provider",dataProviderClass = DP1.class)
+    @Test(dataProvider="data-provider", dataProviderClass = DP1.class)
+   // @Parameters({"UserName", "Password"})
     // @Test
-    public void verifyUser_registration_login_logout_test(String number, String UserName, String Password){
+    public void TestCase01(String UserName, String Password){
+        //System.out.println("--->>" + number);
+        System.out.println("--->>" + UserName);
+        System.out.println("--->>" + Password);
         Assertion assertion = new Assertion();
-        //String randomEmail = randomEmailGenerator.generateRandomEmail();
+        String randomEmail = randomEmailGenerator.generateRandomEmail()+UserName;
         try{
         HomePage homePage = new HomePage(driver);
         homePage.navigateToHomePage();
         RegisterPage registerPage = new RegisterPage(driver);
         registerPage.navigateToRegisterPage();
         registerPage.verifyRegisterPage();
-        registerPage.performRegister(UserName,Password);
+        registerPage.performRegister(randomEmail,Password);
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.performLogin(UserName,Password);
-        homePage.verifyUserLoggedIn(UserName);
+        loginPage.performLogin(randomEmail,Password);
+        homePage.verifyUserLoggedIn(randomEmail);
         homePage.clickOnLogoutButton();
         WebDriverWait wait = new WebDriverWait(driver, 30);
         driver.navigate().refresh();

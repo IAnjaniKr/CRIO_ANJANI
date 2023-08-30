@@ -102,11 +102,11 @@ public class HomePage {
         }
     }
     
-     public String verifyUserLoggedOut(){
+     public void verifyUserLoggedOut(){
         WebDriverWait wait = new WebDriverWait(driver, 60);
         wait.until(ExpectedConditions.textToBePresentInElement(registerButton, "Register"));
         wait.until(ExpectedConditions.textToBePresentInElement(loginLink, "Login Here"));
-        return logoutButton.getText();
+       // return logoutButton.getText();
      }
 
 
