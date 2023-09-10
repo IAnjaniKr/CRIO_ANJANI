@@ -1,5 +1,7 @@
 package qtriptest.pages;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -8,6 +10,8 @@ import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.JavascriptExecutor;
+
 
 
 public class HomePage {
@@ -58,24 +62,15 @@ public class HomePage {
         wait.until(ExpectedConditions.urlToBe(registerUrl)); 
     }
 
-    // public void verifyRegisterPageNav(){
-    //     WebDriverWait wait = new WebDriverWait(driver, 60);
-    //     wait.until(ExpectedConditions.urlToBe(registerUrl));
-    //     driver.getCurrentUrl().equalsIgnoreCase(registerUrl);
-    // }
 
-    public void enterCityNameToSearch(String cityName) throws InterruptedException{
+    public void enterCityNameToSearch(String cityName) throws InterruptedException {
         searchCityInput.clear();
-        for (char letter : cityName.toCharArray()) {
-            if(cityName != null&& !cityName.isEmpty()){
-                searchCityInput.sendKeys(String.valueOf(letter));
-            }else{
-                System.out.print(cityName+" not valid");
-            }
-            Thread.sleep(3000);
-        }    
+        searchCityInput.sendKeys(cityName);
+        Thread.sleep(3000);
+        searchCityInput.sendKeys(" ");
+        Thread.sleep(3000);
     }
-
+    
     public String getAutoSuggestionValue(){
         WebDriverWait wait = new WebDriverWait(driver, 60);
         wait.until(ExpectedConditions.elementToBeClickable(searchResults));
@@ -91,7 +86,7 @@ public class HomePage {
     public void verifyUserLoggedIn(String randomEmail){
        WebDriverWait wait = new WebDriverWait(driver, 60);
        wait.until(ExpectedConditions.textToBePresentInElement(logoutButton, "Logout"));
-       System.out.print(randomEmail+" is logged in and button text is "+logoutButton.getText());
+       System.out.println(randomEmail+" is logged in and button text is "+logoutButton.getText());
     }
     
     public void clickOnLogoutButton(){

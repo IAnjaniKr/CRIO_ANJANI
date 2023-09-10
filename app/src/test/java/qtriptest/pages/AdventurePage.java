@@ -19,11 +19,9 @@ public class AdventurePage {
 
     private RemoteWebDriver driver;
 
-    
-
     public AdventurePage(RemoteWebDriver driver){
         this.driver = driver;
-        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 20), this);
+        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 60), this);
     }
 
     public String adventurePageUrl = "https://qtripdynamic-qa-frontend.vercel.app/pages/adventures";
@@ -46,11 +44,17 @@ public class AdventurePage {
     @FindBy(className="activity-card")
     public List<WebElement> listOfActivityCards;
 
+    @FindBy(className="activity-card")
+    public WebElement activityCards;
+
     @FindBy(css=".category-filter div")
     public WebElement categoryTag;
 
     @FindBy(xpath="//*[text()='Duration']/following::p")
     public WebElement durationText;
+
+    @FindBy(css="#search-adventures")
+    public WebElement searchAdventure;
 
     int initialCountOfActivityCard;
 
@@ -63,7 +67,12 @@ public class AdventurePage {
       wait.until(ExpectedConditions.visibilityOfAllElements(listOfActivityCards));
       return listOfActivityCards;
     }
-
+     
+    public WebElement activityCards(){
+      WebDriverWait wait = new WebDriverWait(driver, 60);
+      wait.until(ExpectedConditions.visibilityOf(activityCards));
+      return activityCards;
+    }
     
 
     public boolean checkTheNavigationOfSelectedCity(String city) {
@@ -79,7 +88,7 @@ public class AdventurePage {
   
 
     public String checkTag(){ 
-      WebDriverWait wait = new WebDriverWait(driver, 30); 
+      WebDriverWait wait = new WebDriverWait(driver, 60); 
       wait.until(ExpectedConditions.visibilityOf(categoryTag));
       return categoryTag.getText();
     }
@@ -114,13 +123,9 @@ public class AdventurePage {
     actions.sendKeys(element, Keys.TAB).perform();
 }
 
-  
-
-    public void clearFilter(WebElement filterType){
-      WebDriverWait wait = new WebDriverWait(driver,30);
+  public void clearFilter(WebElement filterType){
+      WebDriverWait wait = new WebDriverWait(driver,60);
       wait.until(ExpectedConditions.elementToBeClickable(filterType));
       filterType.click();
     }
-
-
 }
