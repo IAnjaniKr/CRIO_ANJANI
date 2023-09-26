@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extentreports>
+    <configuration>
+        <documentTitle>QKART SANITY</documentTitle>
+        <reportName>QKART Sanity Report</reportName>
+        <theme>dark</theme>
+        <encoding>UTF-8</encoding>
+        <testViewChartLocation>bottom</testViewChartLocation>
+    </configuration>
+</extentreports>
+

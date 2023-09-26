@@ -1,7 +1,9 @@
 
 package qtriptest.pages;
 
+import qtriptest.SeleniumWrapper;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -17,14 +19,16 @@ public class HistoryPage {
 
     public HistoryPage(RemoteWebDriver driver){
         this.driver = driver;
-        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 60), this);
+        driver.manage().window().maximize();
+        this.driver.manage().timeouts().pageLoadTimeout(60,TimeUnit.SECONDS);
+        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 120), this);
     }
 
     String reservationsHistoryUrl = "https://qtripdynamic-qa-frontend.vercel.app/pages/adventures/reservations/";
 
     public void navigateToHistory(){
-        driver.navigate().to(reservationsHistoryUrl);
-        WebDriverWait wait = new WebDriverWait(driver,30);
+        SeleniumWrapper.navigate(driver, reservationsHistoryUrl);
+        WebDriverWait wait = new WebDriverWait(driver,100);
         wait.until(ExpectedConditions.urlToBe(reservationsHistoryUrl));
     }
     

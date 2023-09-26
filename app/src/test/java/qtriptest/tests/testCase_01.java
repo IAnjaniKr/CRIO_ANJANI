@@ -1,4 +1,6 @@
 package qtriptest.tests;
+import qtriptest.ReportSingleton;
+import qtriptest.TakeScreenshots;
 import qtriptest.DP1;
 import qtriptest.DriverSingleton;
 import qtriptest.pages.HomePage;
@@ -13,9 +15,14 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.asserts.Assertion;
+import com.relevantcodes.extentreports.ExtentReports;
+import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.LogStatus;
 
 public class testCase_01 {
-    
+    private static ExtentReports extent;
+    private static ExtentTest extentTest;
+
     static RemoteWebDriver driver;
     RandomEmailGenerator randomEmailGenerator = new RandomEmailGenerator(); 
 
@@ -29,27 +36,36 @@ public class testCase_01 {
         logStatus("driver", "Initializing driver", "Started");
         driver = DriverSingleton.getDriver();
         logStatus("driver", "Initializing driver", "Success");
+        extent = ReportSingleton.getInstance();
+        extentTest = ReportSingleton.createTest("testCase_01", "Test Case 01 Description");
     }
     @Test(enabled=true)
     public void verifyAdventureFlow_negative_test1(){
         Assertion assertion = new Assertion();
+        extentTest = extent.startTest("verifyAdventureFlow_negative_test1");
         try{
             HomePage homePage = new HomePage(driver);
             homePage.navigateToHomePage();
             //AdventurePage adventurePage = new AdventurePage(driver);
             assertion.assertTrue(driver.getCurrentUrl().equalsIgnoreCase("https://qtripdynamic-qa-frontend.vercel.app/"));
+            extentTest.log(LogStatus.PASS, "Test Passed: verifyAdventureFlow_negative_test1");
         }catch(Exception e){
           logStatus("Page test", "navigation to adventure page", "failed");
-			e.printStackTrace();
+          extentTest.log(LogStatus.FAIL, "Test Failed: verifyAdventureFlow_negative_test1");
+          extentTest.addScreenCapture(TakeScreenshots.capture(driver) + "Test Failed: verifyAdventureFlow_negative_test1");
+		  e.printStackTrace();
        }   
     }
     
     
     @Test(enabled=true,dataProvider="data-provider", dataProviderClass = DP1.class,groups = "Login Flow",description = "This test case is for the login flow",priority = 1)
     public void TestCase01(String UserName, String Password){
+
+        extentTest = extent.startTest("TestCase01: This test case is for the login flow");
         System.out.println("--->>" + UserName);
         System.out.println("--->>" + Password);
         Assertion assertion = new Assertion();
+        
         String randomEmail = randomEmailGenerator.generateRandomEmail()+UserName;
         try{
         HomePage homePage = new HomePage(driver);
@@ -66,9 +82,12 @@ public class testCase_01 {
         driver.navigate().refresh();
         wait.until(ExpectedConditions.urlToBe("https://qtripdynamic-qa-frontend.vercel.app/"));
         homePage.verifyUserLoggedOut();
+        extentTest.log(LogStatus.PASS,"Test Passed: TestCase01");
     }catch(Exception e){
         logStatus("Page test", "navigation to registration page", "failed");
-			e.printStackTrace();
+        extentTest.log(LogStatus.FAIL,"Test Failed: TestCase01");
+        extentTest.addScreenCapture(TakeScreenshots.capture(driver) + "Test Failed: TestCase01");
+		e.printStackTrace();
        }
     }
 
@@ -77,5 +96,6 @@ public class testCase_01 {
 	public void quitDriver() throws MalformedURLException {
 		DriverSingleton.quitDriver();
 		logStatus("driver", "Quitting driver", "Success");
+        extent.flush();
 	}
 }

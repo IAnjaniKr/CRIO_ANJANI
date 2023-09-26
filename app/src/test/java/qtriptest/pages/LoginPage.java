@@ -1,14 +1,12 @@
 package qtriptest.pages;
 
+import qtriptest.SeleniumWrapper;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -20,7 +18,8 @@ public class LoginPage {
     public LoginPage(RemoteWebDriver driver){
         this.driver = driver;
         driver.manage().window().maximize();
-        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 60), this);
+        this.driver.manage().timeouts().pageLoadTimeout(60,TimeUnit.SECONDS);
+        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 120), this);
     }
 
     @FindBy(xpath="//input[@id='floatingInput']")
@@ -35,15 +34,15 @@ public class LoginPage {
 
     public void navigateToLoginPage() {
         driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
-        driver.get(loginPageUrl);
+        SeleniumWrapper.navigate(driver,loginPageUrl);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     public boolean performLogin(String username, String password) {
         driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-        emailInput.sendKeys(username);
-        passwordInput.sendKeys(password);
-        loginButton.click();
+        SeleniumWrapper.sendKeys(emailInput,username);
+        SeleniumWrapper.sendKeys(passwordInput,password);
+        SeleniumWrapper.click(loginButton,driver);
         System.out.println("Current URL after login attempt: " + driver.getCurrentUrl()); // Add this line
         WebDriverWait wait = new WebDriverWait(driver, 30);
         try {

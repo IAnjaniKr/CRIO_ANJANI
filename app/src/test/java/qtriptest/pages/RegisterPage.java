@@ -1,8 +1,7 @@
 package qtriptest.pages;
 
-import qtriptest.utility.RandomEmailGenerator;
-import java.util.UUID;
-import org.openqa.selenium.TimeoutException;
+import qtriptest.SeleniumWrapper;
+import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -19,7 +18,8 @@ public class RegisterPage {
     public RegisterPage (RemoteWebDriver driver){
         this.driver = driver;
         driver.manage().window().maximize();
-        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 60), this);
+        this.driver.manage().timeouts().pageLoadTimeout(60,TimeUnit.SECONDS);
+        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 120), this);
     }
 
     @FindBy(css="#floatingInput")
@@ -41,7 +41,7 @@ public class RegisterPage {
     public WebElement regiterTitle;
 
     public void navigateToRegisterPage(){
-        driver.get(registerUrl);
+        SeleniumWrapper.navigate(driver,registerUrl);
         WebDriverWait wait = new WebDriverWait(driver, 30);
         wait.until(ExpectedConditions.urlContains("/pages/register/"));
     }
@@ -54,26 +54,24 @@ public class RegisterPage {
         if(title.equals("Register")){
             return true;
         }
-        }catch(TimeoutException e){
+        }catch(Exception e){
             return false;
         }
         return false;
     }
 
     public boolean performRegister(String randomEmail, String password){
-        emailInput.sendKeys(randomEmail);
-        passwordInput.sendKeys(password);
-        confirmPassword.sendKeys(password);
-        registerNowButton.click();
+        SeleniumWrapper.sendKeys(emailInput,randomEmail);
+        SeleniumWrapper.sendKeys(passwordInput,password);
+        SeleniumWrapper.sendKeys(confirmPassword,password);
+        SeleniumWrapper.click(registerNowButton,driver);
         WebDriverWait wait = new WebDriverWait(driver, 30);
         try {
             wait.until(ExpectedConditions.urlToBe("https://qtripdynamic-qa-frontend.vercel.app/pages/login"));
             return true; // registration login
-        } catch (TimeoutException e) {
+        } catch (Exception e) {
             return false; // registration failed
         }
-    }
-
-    
+    }  
 
 }

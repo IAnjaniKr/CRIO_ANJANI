@@ -1,6 +1,9 @@
 package qtriptest.pages;
 
 
+import qtriptest.SeleniumWrapper;
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -17,10 +20,15 @@ public class AdventureDetailsPage {
 
     public AdventureDetailsPage(RemoteWebDriver driver){
         this.driver = driver;
-        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 60), this);
+        driver.manage().window().maximize();
+        this.driver.manage().timeouts().pageLoadTimeout(60,TimeUnit.SECONDS);
+        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 120), this);
     }
 
-    @FindBy(id="reservation-panel-available")
+    @FindBy(xpath="//a[contains(text(),'Reservations')]")
+    private WebElement topNavReservations;
+
+    @FindBy(css="#reservation-panel-available")
     private WebElement reservationForm;
 
     @FindBy(id = "adventure-name")
@@ -48,7 +56,7 @@ public class AdventureDetailsPage {
     private WebElement reservationLink;
 
     public WebElement getReservationSuccess(){
-        WebDriverWait wait = new WebDriverWait(driver, 60);
+        WebDriverWait wait = new WebDriverWait(driver, 100);
         wait.until(ExpectedConditions.visibilityOf(reservationSuccess));
         return reservationSuccess;
     }
@@ -77,9 +85,15 @@ public class AdventureDetailsPage {
         return reserveButton;
     }
 
+    public WebElement getTopNavReservations(){
+        return topNavReservations;
+    }
+
     public void waitForReservationForm(){
-        WebDriverWait wait = new WebDriverWait(driver, 60);
+        WebDriverWait wait = new WebDriverWait(driver, 200);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#reservation-panel-available")));
         wait.until(ExpectedConditions.visibilityOf(reservationForm));
+        wait.until(ExpectedConditions.elementToBeClickable(reservationForm));
     }
 
 
@@ -88,27 +102,25 @@ public class AdventureDetailsPage {
         String day = dateComponents[0];
         String month = dateComponents[1];
         String year = dateComponents[2];
-        dateInput.clear();
-        dateInput.sendKeys(day);
-        Thread.sleep(1000);
-        dateInput.sendKeys(month);
-        Thread.sleep(1000);
-        dateInput.sendKeys(year);
-        Thread.sleep(1000);
+       SeleniumWrapper.sendKeys(dateInput,day+month+year);
     }
     
 
     public void createReservation(String Name, String Date, String personCount) throws InterruptedException{
-        this.getNameInput().clear();
-        this.getNameInput().sendKeys(Name);
+        WebDriverWait wait = new WebDriverWait(driver,90);
+        wait.until(ExpectedConditions.elementToBeClickable(this.getNameInput()));
+        SeleniumWrapper.sendKeys(this.getNameInput(),Name);
         this.selectDate(Date);
-        this.getPersonInput().clear();
-        this.getPersonInput().sendKeys(personCount);
-        this.getReserveButton().click();
+        wait.until(ExpectedConditions.elementToBeClickable(this.getPersonInput()));
+        SeleniumWrapper.sendKeys(this.getPersonInput(),personCount);
+        wait.until(ExpectedConditions.elementToBeClickable(this.getReserveButton()));
+        SeleniumWrapper.click(this.getReserveButton(),driver);
     }
 
     
     public WebElement getreservationLink(){
+        WebDriverWait wait = new WebDriverWait(driver, 100);
+        wait.until(ExpectedConditions.visibilityOf(reservationLink));
         return reservationLink;
     }
 
