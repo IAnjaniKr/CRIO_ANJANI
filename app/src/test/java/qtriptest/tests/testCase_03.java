@@ -87,7 +87,7 @@ public class testCase_03 {
                   }else{
                       System.out.println("Autosuggested City Name: "+homePage.getAutoSuggestionValue(SearchCity).getText());
                     }
-              //homePage.clickOnSearchedCity();
+              
                 adventurePage.checkTheNavigationOfSelectedCity(SearchCity);
                 driver.navigate().refresh();
                 wait.until(ExpectedConditions.urlMatches(".*/pages/adventures/\\?city=.*"));

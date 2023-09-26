@@ -46,7 +46,6 @@ public class testCase_01 {
         try{
             HomePage homePage = new HomePage(driver);
             homePage.navigateToHomePage();
-            //AdventurePage adventurePage = new AdventurePage(driver);
             assertion.assertTrue(driver.getCurrentUrl().equalsIgnoreCase("https://qtripdynamic-qa-frontend.vercel.app/"));
             extentTest.log(LogStatus.PASS, "Test Passed: verifyAdventureFlow_negative_test1");
         }catch(Exception e){
@@ -90,7 +89,6 @@ public class testCase_01 {
 		e.printStackTrace();
        }
     }
-
     // Quit webdriver after Unit Tests
 	@AfterTest(enabled=true)
 	public void quitDriver() throws MalformedURLException {

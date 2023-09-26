@@ -47,9 +47,7 @@ public class testCase_02 {
         Assertion assertion = new Assertion();
         try{
             HomePage homePage = new HomePage(driver);
-            homePage.navigateToHomePage();
-            //AdventurePage adventurePage = new AdventurePage(driver);
-            
+            homePage.navigateToHomePage();    
     }catch(Exception e){
         logStatus("Page test", "navigation to adventure page", "failed");
 			e.printStackTrace();
@@ -83,12 +81,7 @@ public class testCase_02 {
         }else{
             System.out.println("Autosuggested City Name: "+homePage.getAutoSuggestionValue(CityName).getText());
         }
-        // homePage.clickOnSearchedCity();
-        // driver.navigate().refresh();
-        // wait.until(ExpectedConditions.urlToBe("https://qtripdynamic-qa-frontend.vercel.app/pages/adventures/?city="+CityName.toLowerCase()));
         adventurePage.checkTheNavigationOfSelectedCity(CityName);
-
-
         //Apply Duration Filter
         adventurePage.selectFilter(adventurePage.durationFilter, durationFilter);
         Thread.sleep(3000);

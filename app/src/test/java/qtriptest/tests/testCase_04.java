@@ -84,7 +84,7 @@ public class testCase_04 {
                 homePage.navigateToHomePage();    
                 homePage.enterCityNameToSearch(result[i][0]);
                 WebElement element = homePage.getAutoSuggestionValue(result[i][0]);
-               // Thread.sleep(6000);
+                Thread.sleep(6000);
                 wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#results"))); 
                 if(homePage.getAutoSuggestionValue(result[i][0]).getText().equalsIgnoreCase(result[i][0])){
                    System.out.println(result[i][0]+" is available");
@@ -93,7 +93,7 @@ public class testCase_04 {
                   }else{
                       System.out.println("Autosuggested City Name: "+homePage.getAutoSuggestionValue(result[i][0]).getText());
                     }
-                //homePage.clickOnSearchedCity();
+                
                 adventurePage.checkTheNavigationOfSelectedCity(result[i][0]);
                 driver.navigate().refresh();
                 wait.until(ExpectedConditions.urlMatches(".*/pages/adventures/\\?city=.*"));
